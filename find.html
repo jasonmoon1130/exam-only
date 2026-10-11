@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="no-referrer">
+  <title>Find schools | EXAM ONLY</title>
+  <meta name="description" content="Search Tennessee public high schools by county, city or ZIP code and email each one about taking your AP exam.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <section class="finder-bar">
+    <div class="wrap">
+      <h1 class="display finder-title">Find schools</h1>
+      <form id="search-form" class="search" action="find.html">
+        <label>
+          AP exam
+          <select id="exam-select" name="exam">
+            <option value="">Choose an exam</option>
+          </select>
+        </label>
+        <label>
+          County, city or ZIP code
+          <input id="place-input" name="place" type="text" list="county-list" placeholder="Montgomery, Clarksville or 37040" autocomplete="off">
+        </label>
+        <button class="btn btn-primary" type="submit">Find schools</button>
+      </form>
+      <datalist id="county-list"></datalist>
+      <p id="form-error" class="form-error" role="alert"></p>
+      <p class="deadline-line" id="deadline"></p>
+    </div>
+  </section>
+
+  <main class="wrap finder">
+
+    <section aria-labelledby="results-title">
+      <div id="start-state">
+        <h2 class="section-title results-start">Start with your exam and where you live.</h2>
+        <p class="section-lede">Type a county, a city, or your ZIP code to see schools within 40 miles. Then pick a school and write your email.</p>
+      </div>
+
+      <div id="results-head" class="results-head" hidden>
+        <h2 id="results-title" aria-live="polite"></h2>
+        <p id="results-sub" class="results-sub"></p>
+      </div>
+
+      <ul id="school-list" class="school-list"></ul>
+
+      <section id="study" class="study-strip" hidden aria-labelledby="study-title">
+        <h3 id="study-title"></h3>
+        <div id="study-links" class="study-links"></div>
+        <p id="study-free" class="study-free" hidden></p>
+        <p class="study-tip">Once a school adds you to its exam order, ask the AP coordinator for your class join code. It unlocks AP Classroom practice questions and AP Daily videos.</p>
+      </section>
+    </section>
+
+    <div id="sheet-backdrop" class="sheet-backdrop" hidden></div>
+
+    <aside id="email-panel" class="email-panel" aria-labelledby="panel-title">
+      <div id="panel-tips" class="panel-tips">
+        <h2>Before you email</h2>
+        <ol>
+          <li><strong>Ask your own school first.</strong> Your AP coordinator can add you to the school's exam order without the class.</li>
+          <li><strong>Email five schools the same day.</strong> Don't wait for one reply before you try the next.</li>
+          <li><strong>Answer a yes the same day.</strong> Confirm the exam, the fee and their payment deadline.</li>
+        </ol>
+      </div>
+
+      <div id="composer" class="composer" hidden>
+        <div class="composer-head">
+          <h2 id="panel-title">Email to <span id="picked-school"></span></h2>
+          <button id="close-panel" class="close-btn" type="button" aria-label="Close email">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+
+        <div class="composer-body">
+          <fieldset class="composer-step">
+            <legend>Who are you writing to?</legend>
+            <label>
+              Their role
+              <select id="contact-select"></select>
+            </label>
+            <div class="pair">
+              <label>
+                Their name, if you know it
+                <input id="to-name" type="text" placeholder="Ms. Carter" autocomplete="off">
+              </label>
+              <label>
+                Their email
+                <input id="to-email" type="email" placeholder="name@school.org" autocomplete="off">
+              </label>
+            </div>
+            <p class="find-person" id="find-person"></p>
+            <details class="help">
+              <summary>No name on the website? Call and say this</summary>
+              <p id="call-script" class="call-script"></p>
+              <p class="help-note">If they ask about cost: the College Board fee is $99 per exam in 2026–27, and some schools add their own fee.</p>
+            </details>
+          </fieldset>
+
+          <fieldset class="composer-step">
+            <legend>About you</legend>
+            <div class="me">
+              <label>
+                Your name
+                <input id="name-input" type="text" placeholder="First and last name" autocomplete="name">
+              </label>
+              <label>
+                Grade
+                <select id="grade-input">
+                  <option value="">Choose</option>
+                  <option>9th</option>
+                  <option>10th</option>
+                  <option>11th</option>
+                  <option>12th</option>
+                </select>
+              </label>
+              <label class="full">
+                Your school
+                <input id="myschool-input" type="text" placeholder="School name">
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="composer-step">
+            <legend>Your email</legend>
+            <label>
+              Subject
+              <input id="subject-preview" type="text">
+            </label>
+            <label>
+              Message (edit anything before you send it)
+              <textarea id="email-preview" rows="12"></textarea>
+            </label>
+          </fieldset>
+          <p class="school-account">Using a school Google account? It may block email to other schools. If your email bounces, send it from a personal account.</p>
+          <p class="safety-tip"><strong>Pause before you send.</strong> Check that the address ends in the school's real web address. Never email a password, your Social Security number or card numbers. Pay any fee only the way the school's official office tells you to.</p>
+        </div>
+
+        <div class="composer-actions">
+          <div id="sent-check" class="sent-check" hidden>
+            <p>Did you send it?</p>
+            <div class="sent-buttons">
+              <button id="sent-yes" class="btn btn-primary btn-small" type="button">Yes, mark as sent</button>
+              <button id="sent-no" class="btn btn-line btn-small" type="button">Not yet</button>
+            </div>
+          </div>
+          <div class="email-actions">
+            <button id="email-button" class="btn btn-primary" type="button">Open in my email</button>
+            <button id="copy-subject" class="btn btn-line" type="button">Copy subject</button>
+            <button id="copy-button" class="btn btn-line" type="button">Copy message</button>
+          </div>
+          <p id="email-note" class="note" role="status"></p>
+        </div>
+      </div>
+    </aside>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="data/schools.js"></script>
+  <script src="data/zips.js"></script>
+  <script src="data/resources.js"></script>
+  <script src="data/email-template.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/find.js"></script>
+</body>
+</html>
